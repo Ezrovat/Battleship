@@ -1,10 +1,19 @@
 class Ship {
     #hits;
 
-    constructor(length) {
-        this.length = length;
+    MODELS = {
+        "Carrier": 5,
+        "Battleship": 4,
+        "Cruiser": 3,
+        "Submarine": 3,
+        "Destroyer": 2
+    }
+
+    constructor(model) {
+        this.length = this.MODELS[model];
         this.#hits = 0;
     }
+
 
     hit() {
         this.#hits++;
