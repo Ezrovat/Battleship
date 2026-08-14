@@ -13,32 +13,44 @@ class Gameboard {
 
     constructor() {
         this.#shipCache = new Map();
-        this.#board = new Array(this.SIZE).fill(null).map(() => new Array(this.SIZE).fill(null));
-        this.#hitTrack = new Array(this.SIZE).fill(null).map(() => new Array(this.SIZE).fill(null));
+        this.#board = new Array(Gameboard.SIZE).fill(null).map(() => new Array(Gameboard.SIZE).fill(null));
+        this.#hitTrack = new Array(Gameboard.SIZE).fill(null).map(() => new Array(Gameboard.SIZE).fill(null));
     }
 
     placeShip(x, y, direction, model) {
         const ship = new Ship(model);
 
-        this.#shipCache.set(ship, []);
+        const boardCopy = JSON.parse(JSON.stringify(this.#board));
+        const shipPositions = [];
+        
 
-        if(direction === "horizzontal") {
-            if(y + ship.length >= this.SIZE) throw new Error("Out of bounds");
+        if(direction === "horizontal") {
+            if(y + ship.length > Gameboard.SIZE) throw new Error("Out of bounds");
 
             for(let i = 0; i < ship.length; i++) {
-                this.#board[x][y + i] = ship;
-                this.#shipCache.get(ship).push([x, y + i]);
+
+                if(boardCopy[x][y + i] !== null) throw new Error("Cell occupied");
+
+                boardCopy[x][y + i] = ship;
+                shipPositions.push([x, y + i]);
             }
         } 
 
         else if (direction === "vertical") {
-            if(x + ship.length >= this.SIZE) throw new Error("Out of bounds");
+            if(x + ship.length > Gameboard.SIZE) throw new Error("Out of bounds");
 
             for(let i = 0; i < ship.length; i++) {
-                this.#board[x + i][y] = ship;
-                this.#shipCache.get(ship).push([x + 1, y]);
+
+                if(boardCopy[x + i][y] !== null) throw new Error("Cell occupied");
+
+                boardCopy[x][y + i] = ship;
+                shipPositions.push([x + 1, y]);
             }
         }
+
+        this.#shipCache.set(ship, shipPositions);
+
+        this.#board = boardCopy;
     }
 
     receiveAttack(x, y) {

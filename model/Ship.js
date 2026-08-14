@@ -1,7 +1,7 @@
 class Ship {
     #hits;
 
-    MODELS = {
+    static MODELS = {
         "Carrier": 5,
         "Battleship": 4,
         "Cruiser": 3,
@@ -10,7 +10,7 @@ class Ship {
     }
 
     constructor(model) {
-        this.length = this.MODELS[model];
+        this.length = Ship.MODELS[model];
         this.#hits = 0;
     }
 
@@ -25,3 +25,4 @@ class Ship {
 }
 
 export default Ship;
+export const models = Ship.MODELS;
