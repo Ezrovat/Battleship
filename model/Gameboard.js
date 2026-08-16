@@ -18,9 +18,12 @@ class Gameboard {
     }
 
     placeShip(x, y, direction, model) {
+
+        this.#checkInputOutOfBound(x, y);
+
         const ship = new Ship(model);
 
-        const boardCopy = JSON.parse(JSON.stringify(this.#board));
+        const boardCopy = this.#board.map(row => [...row]);
         const shipPositions = [];
         
 
@@ -43,8 +46,8 @@ class Gameboard {
 
                 if(boardCopy[x + i][y] !== null) throw new Error("Cell occupied");
 
-                boardCopy[x][y + i] = ship;
-                shipPositions.push([x + 1, y]);
+                boardCopy[x + i][y] = ship;
+                shipPositions.push([x + i, y]);
             }
         }
 
@@ -54,6 +57,9 @@ class Gameboard {
     }
 
     receiveAttack(x, y) {
+
+        this.#checkInputOutOfBound(x, y);
+
         const ship = this.#board[x][y];
         let hitTrack = this.#hitTrack[x][y];
 
@@ -77,6 +83,14 @@ class Gameboard {
         return false;
     }
 
+    #checkInputOutOfBound(x, y) {
+        if(x < 0 || x >= Gameboard.SIZE || y < 0 || y >= Gameboard.SIZE) {
+            throw new Error("Out of bounds");
+        }
+    }
+
 }
 
 export default new Gameboard();
+export const size = Gameboard.SIZE;
+export  {Gameboard};
