@@ -2,18 +2,18 @@ class Ship {
     #hits;
 
     static MODELS = {
-        "Carrier": 5,
-        "Battleship": 4,
-        "Cruiser": 3,
-        "Submarine": 3,
-        "Destroyer": 2
-    }
+        Carrier: 5,
+        Battleship: 4,
+        Cruiser: 3,
+        Submarine: 3,
+        Destroyer: 2,
+    };
 
     constructor(model) {
+        if (!Ship.MODELS[model]) throw new Error("Invalid model");
         this.length = Ship.MODELS[model];
         this.#hits = 0;
     }
-
 
     hit() {
         this.#hits++;

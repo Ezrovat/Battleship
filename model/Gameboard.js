@@ -13,38 +13,40 @@ class Gameboard {
 
     constructor() {
         this.#shipCache = new Map();
-        this.#board = new Array(Gameboard.SIZE).fill(null).map(() => new Array(Gameboard.SIZE).fill(null));
-        this.#hitTrack = new Array(Gameboard.SIZE).fill(null).map(() => new Array(Gameboard.SIZE).fill(null));
+        this.#board = new Array(Gameboard.SIZE)
+            .fill(null)
+            .map(() => new Array(Gameboard.SIZE).fill(null));
+        this.#hitTrack = new Array(Gameboard.SIZE)
+            .fill(null)
+            .map(() => new Array(Gameboard.SIZE).fill(null));
     }
 
     placeShip(x, y, direction, model) {
-
         this.#checkInputOutOfBound(x, y);
 
         const ship = new Ship(model);
 
-        const boardCopy = this.#board.map(row => [...row]);
+        const boardCopy = this.#board.map((row) => [...row]);
         const shipPositions = [];
-        
 
-        if(direction === "horizontal") {
-            if(y + ship.length > Gameboard.SIZE) throw new Error("Out of bounds");
+        if (direction === "horizontal") {
+            if (y + ship.length > Gameboard.SIZE)
+                throw new Error("Out of bounds");
 
-            for(let i = 0; i < ship.length; i++) {
-
-                if(boardCopy[x][y + i] !== null) throw new Error("Cell occupied");
+            for (let i = 0; i < ship.length; i++) {
+                if (boardCopy[x][y + i] !== null)
+                    throw new Error("Cell occupied");
 
                 boardCopy[x][y + i] = ship;
                 shipPositions.push([x, y + i]);
             }
-        } 
+        } else if (direction === "vertical") {
+            if (x + ship.length > Gameboard.SIZE)
+                throw new Error("Out of bounds");
 
-        else if (direction === "vertical") {
-            if(x + ship.length > Gameboard.SIZE) throw new Error("Out of bounds");
-
-            for(let i = 0; i < ship.length; i++) {
-
-                if(boardCopy[x + i][y] !== null) throw new Error("Cell occupied");
+            for (let i = 0; i < ship.length; i++) {
+                if (boardCopy[x + i][y] !== null)
+                    throw new Error("Cell occupied");
 
                 boardCopy[x + i][y] = ship;
                 shipPositions.push([x + i, y]);
@@ -57,40 +59,49 @@ class Gameboard {
     }
 
     receiveAttack(x, y) {
-
         this.#checkInputOutOfBound(x, y);
 
         const ship = this.#board[x][y];
         let hitTrack = this.#hitTrack[x][y];
 
-        if(hitTrack) {
+        if (hitTrack) {
             throw new Error("Already attacked");
         }
 
-        if(ship) {
-            ship.hit();    
-            if(ship.isSunk()) {
-                this.#shipCache.get(ship).forEach(
-                    cell => this.#hitTrack[cell[0]][cell[1]] = Gameboard.SUNK
-                );
+        if (ship) {
+            ship.hit();
+            if (ship.isSunk()) {
+                this.#shipCache
+                    .get(ship)
+                    .forEach(
+                        (cell) =>
+                            (this.#hitTrack[cell[0]][cell[1]] = Gameboard.SUNK),
+                    );
+                return true;
             }
             this.#hitTrack[x][y] = Gameboard.HIT;
             return true;
-
         }
 
         this.#hitTrack[x][y] = Gameboard.MISS;
         return false;
     }
 
+    getHitTrack() {
+        return this.#hitTrack.map((row) => [...row]);
+    }
+
+    printHitTrack() {
+        console.log(this.#hitTrack.map((row) => row.join(" ")).join("\n"));
+    }
+
     #checkInputOutOfBound(x, y) {
-        if(x < 0 || x >= Gameboard.SIZE || y < 0 || y >= Gameboard.SIZE) {
+        if (x < 0 || x >= Gameboard.SIZE || y < 0 || y >= Gameboard.SIZE) {
             throw new Error("Out of bounds");
         }
     }
-
 }
 
 export default new Gameboard();
 export const size = Gameboard.SIZE;
-export  {Gameboard};
+export { Gameboard };
