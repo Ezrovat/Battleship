@@ -135,6 +135,8 @@ describe("Gameboard main flow", () => {
             0,
         );
 
+        expect(gameboard.gameOver()).toBe(false);
+
         successfulPlacements.forEach((test) => {
             const shipLength = models[test.input.model];
 
@@ -153,6 +155,8 @@ describe("Gameboard main flow", () => {
 
         let missCount = 0;
 
+        
+
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
                 let result;
@@ -169,6 +173,7 @@ describe("Gameboard main flow", () => {
         }
 
         expect(missCount).toBe(size * size - occupiedCellsTotal);
+        expect(gameboard.gameOver()).toBe(true);
     });
 });
 
@@ -221,3 +226,35 @@ describe("Gameboard isolated tests", () => {
         }
     });
 });
+
+describe("Gameboard game over", () => {
+    beforeEach(() => {
+        gameboard = new Gameboard();
+    });
+
+
+    test("no ships", () => {
+        expect(() => gameboard.gameOver()).toThrow("No ship");
+    })
+
+    test("all ships are sunk", () => {
+        let model1 = "Carrier";
+        let model2 = "Battleship";
+
+        gameboard.placeShip(0, 0, "horizontal", model1);
+        gameboard.placeShip(0, Gameboard.SIZE - 1, "vertical", model2);
+
+        for (let i = 0; i < models[model1]; i++) {
+            expect(gameboard.gameOver()).toBe(false);
+            gameboard.receiveAttack(0, i);
+        }
+
+        for(let i = 0; i < models[model2]; i++) {
+            expect(gameboard.gameOver()).toBe(false);
+            gameboard.receiveAttack(i, Gameboard.SIZE - 1);
+        }
+
+        expect(gameboard.gameOver()).toBe(true);
+
+    })
+})

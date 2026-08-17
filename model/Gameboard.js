@@ -8,7 +8,6 @@ class Gameboard {
 
     #board;
     #hitTrack;
-
     #shipCache;
 
     constructor() {
@@ -89,6 +88,17 @@ class Gameboard {
 
     getHitTrack() {
         return this.#hitTrack.map((row) => [...row]);
+    }
+
+    gameOver() {
+        if(this.#shipCache.size === 0) throw new Error("No ship");
+        let result = true;
+        this.#shipCache.keys().forEach((ship) => {
+            if (!ship.isSunk()) result = false;   
+        })
+
+        return result;
+
     }
 
     printHitTrack() {
