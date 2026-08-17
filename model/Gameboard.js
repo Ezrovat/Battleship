@@ -4,6 +4,7 @@ class Gameboard {
     static SIZE = 10;
     static MISS = "MISS";
     static HIT = "HIT";
+    static UNTRACKED = "UNTRACKED";
     static SUNK = "SUNK";
 
     #board;
@@ -17,7 +18,7 @@ class Gameboard {
             .map(() => new Array(Gameboard.SIZE).fill(null));
         this.#hitTrack = new Array(Gameboard.SIZE)
             .fill(null)
-            .map(() => new Array(Gameboard.SIZE).fill(null));
+            .map(() => new Array(Gameboard.SIZE).fill(Gameboard.UNTRACKED));
     }
 
     placeShip(x, y, direction, model) {
@@ -61,9 +62,9 @@ class Gameboard {
         this.#checkInputOutOfBound(x, y);
 
         const ship = this.#board[x][y];
-        let hitTrack = this.#hitTrack[x][y];
+        const hitTrack = this.#hitTrack[x][y];
 
-        if (hitTrack) {
+        if (hitTrack !== Gameboard.UNTRACKED) {
             throw new Error("Already attacked");
         }
 

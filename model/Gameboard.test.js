@@ -205,7 +205,7 @@ describe("Gameboard isolated tests", () => {
         const model = "Carrier";
 
         gameboard.placeShip(0, 0, "horizontal", model);
-        expect(gameboard.getHitTrack()[0][0]).toBe(null);
+        expect(gameboard.getHitTrack()[0][0]).toBe(Gameboard.UNTRACKED);
         gameboard.receiveAttack(1, 0);
         expect(gameboard.getHitTrack()[1][0]).toBe(Gameboard.MISS);
 
