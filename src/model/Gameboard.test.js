@@ -155,8 +155,6 @@ describe("Gameboard main flow", () => {
 
         let missCount = 0;
 
-        
-
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
                 let result;
@@ -215,8 +213,6 @@ describe("Gameboard isolated tests", () => {
                 expect(gameboard.getHitTrack()[0][i]).toBe(Gameboard.HIT);
         }
 
-        gameboard.printHitTrack();
-
         let j = 0;
         for (; j < models[model]; j++) {
             expect(gameboard.getHitTrack()[0][j]).toBe(Gameboard.SUNK);
@@ -232,10 +228,9 @@ describe("Gameboard game over", () => {
         gameboard = new Gameboard();
     });
 
-
     test("no ships", () => {
         expect(() => gameboard.gameOver()).toThrow("No ship");
-    })
+    });
 
     test("all ships are sunk", () => {
         let model1 = "Carrier";
@@ -249,12 +244,11 @@ describe("Gameboard game over", () => {
             gameboard.receiveAttack(0, i);
         }
 
-        for(let i = 0; i < models[model2]; i++) {
+        for (let i = 0; i < models[model2]; i++) {
             expect(gameboard.gameOver()).toBe(false);
             gameboard.receiveAttack(i, Gameboard.SIZE - 1);
         }
 
         expect(gameboard.gameOver()).toBe(true);
-
-    })
-})
+    });
+});

@@ -92,14 +92,13 @@ class Gameboard {
     }
 
     gameOver() {
-        if(this.#shipCache.size === 0) throw new Error("No ship");
+        if (this.#shipCache.size === 0) throw new Error("No ship");
         let result = true;
         this.#shipCache.keys().forEach((ship) => {
-            if (!ship.isSunk()) result = false;   
-        })
+            if (!ship.isSunk()) result = false;
+        });
 
         return result;
-
     }
 
     printHitTrack() {

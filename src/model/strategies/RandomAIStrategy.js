@@ -1,4 +1,4 @@
-import {Gameboard} from "../Gameboard";
+import { Gameboard } from "../Gameboard";
 
 class RandomAIStrategy {
     constructor() {}
@@ -14,11 +14,13 @@ class RandomAIStrategy {
             }
         }
 
-        if(availableCoordinates.length === 0) {
+        if (availableCoordinates.length === 0) {
             throw new Error("No available coordinates");
         }
 
-        const randomIndex = Math.floor(Math.random() * availableCoordinates.length);
+        const randomIndex = Math.floor(
+            Math.random() * availableCoordinates.length,
+        );
         return availableCoordinates[randomIndex];
     }
 }
